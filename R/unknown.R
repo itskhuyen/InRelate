@@ -1,6 +1,6 @@
-hs<-read.table("example.str",header=TRUE);
-etaik<-read.table("example.indivq");
-pkla<-read.table("example.pkla");
+hs<-read.table("ur-HI3-samepop.str",header=TRUE);
+etaik<-read.table("ur-HI3-samepop.str_admix_indivq_3.indivq");
+pkla<-read.table("ur-HI3-samepop.str_pkla_K=3.txt");
 
 #' Read in the dataset from .indivq file
 #' @title Read INDIVQ file
@@ -28,6 +28,7 @@ getSubpop <- function(etaik){
   K <- length(etaik[,6:ncol(etaik)])
   return(K)
 }
+K <- getSubpop(etaik)
 
 #' Read in PKLA data
 #' This function takes a data frame containing PKLA data and returns a data frame with only the PKLA data, excluding the first two columns.
@@ -77,9 +78,9 @@ getLoci <- function(hs){
 #' @export
 #' @seealso \code{\link{readStr}}, \code{\link{readIndivq}}, \code{\link{readPkla}}
 upload_data <- function() {
-  strfile <- read.table("example.str", header = TRUE)
-  indivqfile <- read.table("example.indivq")
-  pklafile <- read.table("example.pkla")
+  strfile <- read.table("ur-HI3-samepop.str", header = TRUE)
+  indivqfile <- read.table("ur-HI3-samepop.str_admix_indivq_3.indivq")
+  pklafile <- read.table("ur-HI3-samepop.str_pkla_K=3.txt")
 
   return(list(hs = hs, etaik = etaik, pkla = pkla))
 }
@@ -125,7 +126,6 @@ print(extracted_data)
 #' calculateRelate(example.str, example.pkla, example.indivq)
 #' @export
 calculateRelate <- function(hs, etaik, indiv){
-
   loglikibd<-function(ibds) {
     # array has to be of dim=c(1, number of loci)
     loglik<-array(0,dim=c(1,getLoci(hs)))
@@ -147,7 +147,7 @@ calculateRelate <- function(hs, etaik, indiv){
     return(sum)
   }
 
-
+  filename1 <- "filename1.txt"
   # Inequality constraints: all should be >0, <1
   ineq1<-function(ibds){
     z1=ibds[1]
@@ -198,7 +198,7 @@ calculateRelate <- function(hs, etaik, indiv){
   # TODO: AS - loop over all pairs of individuals instead! DONE: 2/25/2014
 
 
-  for(i in 1:50) {
+  for(i in 1:50) {{
     for (j in i:50) {
       for(x in 1:K)	{
         indiv1.etaik[x]<-etaik[i,x+5]
@@ -695,7 +695,6 @@ calculateRelate <- function(hs, etaik, indiv){
       #  return(2 * (mle$pars[1] + 0.5 * (mle$pars[3] + mle$pars[5] + mle$pars[7]) + 0.25 * (mle$pars[8])))}
       # Append delta values to an output file - you can change name here as you like.
       # adding bootstrap code to this
-      filename1 <- "filename1.txt"
       deltafile<-paste(filename1,".deltas",sep="")
       print("699)")
       cat(c(mle$pars[1],mle$pars[2],mle$pars[3],mle$pars[4],mle$pars[5],mle$pars[6],mle$pars[7],mle$pars[8],mle$pars[9]),"\n",file=deltafile,append=TRUE)
@@ -718,15 +717,12 @@ calculateRelate <- function(hs, etaik, indiv){
       #decrementj<-decrementj+2
       #decrementi<-decrementi+2
       g<-g+1
-
-      print("at 721")
-      # Write final relatedness output to a file. You can change name as you like.
-      relatfile<-paste(filename1,".relat",sep="")
-      write.table(relat,relatfile)
     }
+    print("at 721")
+    #Write final relatedness output to a file. You can change name as you like.
+    relatfile<-paste(filename1,".relat",sep="")
+    write.table(relat,relatfile)}
   }
-  #print("at 721")
-  # Write final relatedness output to a file. You can change name as you like.
-  #relatfile<-paste(filename1,".relat",sep="")
-  #write.table(relat,relatfile)
 }
+
+
