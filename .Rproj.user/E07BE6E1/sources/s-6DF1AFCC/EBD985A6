@@ -5,13 +5,15 @@
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "3770629494",
+    "hash" : "0",
     "id" : "EBD985A6",
-    "lastKnownWriteTime" : 1682273313,
-    "last_content_update" : 1682273313,
+    "lastKnownWriteTime" : 1681683959,
+    "last_content_update" : 1681683959,
     "path" : "~/Desktop/InRelate/example.indivq",
     "project_path" : "example.indivq",
     "properties" : {
+        "cursorPosition" : "0,0",
+        "scrollLine" : "0"
     },
     "relative_order" : 6,
     "source_on_save" : false,

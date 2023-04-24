@@ -1,6 +1,6 @@
-hs<-read.table("ur-HI3-samepop.str",header=TRUE);
-etaik<-read.table("ur-HI3-samepop.str_admix_indivq_3.indivq");
-pkla<-read.table("ur-HI3-samepop.str_pkla_K=3.txt");
+hs<-read.table("example.str.str",header=TRUE);
+etaik<-read.table("example.indivq.indivq");
+pkla<-read.table("examplepkla.txt.txt");
 
 #' Read in the dataset from .indivq file
 #' @title Read INDIVQ file
@@ -78,9 +78,9 @@ getLoci <- function(hs){
 #' @export
 #' @seealso \code{\link{readStr}}, \code{\link{readIndivq}}, \code{\link{readPkla}}
 upload_data <- function() {
-  strfile <- read.table("ur-HI3-samepop.str", header = TRUE)
-  indivqfile <- read.table("ur-HI3-samepop.str_admix_indivq_3.indivq")
-  pklafile <- read.table("ur-HI3-samepop.str_pkla_K=3.txt")
+  strfile <- read.table("example.str", header = TRUE)
+  indivqfile <- read.table("example.indivq")
+  pklafile <- read.table("examplepkla.txt")
 
   return(list(hs = hs, etaik = etaik, pkla = pkla))
 }
