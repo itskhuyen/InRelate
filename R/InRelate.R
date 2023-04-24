@@ -106,18 +106,18 @@ calculateRelate <- function(hs, etaik, pkla){
 
   # Arrays for storing the etaiks. Should be of size K.
 
-  indiv1.etaik<-array(dim=c(K))
-  indiv2.etaik<-array(dim=c(K))
+  indiv1.etaik<-array(dim=c(getSubpop(etaik)))
+  indiv2.etaik<-array(dim=c(getSubpop(etaik)))
 
   # Predictor array should be of size = Number of Loci x 9
 
   predictors<-array(0,dim=c(getLoci(hs),9))
 
   # Allele frequency arrays for each of four alleles (assume diploid genotypes $A_{i}A_{j}$ and $A_{k}A_{l}$, two individuals).
-  pklallelei<-array(dim=c(K))
-  pklallelej<-array(dim=c(K))
-  pklallelek<-array(dim=c(K))
-  pklallelel<-array(dim=c(K))
+  pklallelei<-array(dim=c(getSubpop(etaik)))
+  pklallelej<-array(dim=c(getSubpop(etaik)))
+  pklallelek<-array(dim=c(getSubpop(etaik)))
+  pklallelel<-array(dim=c(getSubpop(etaik)))
 
   # Loop control variables - don't change!
 
@@ -133,10 +133,10 @@ calculateRelate <- function(hs, etaik, pkla){
 
   for(i in 1:50) {{
     for (j in i:50) {
-      for(x in 1:K)	{
+      for(x in 1:(getSubpop(etaik)))	{
         indiv1.etaik[x]<-etaik[i,x+5]
       }
-      for(x in 1:K)	{
+      for(x in 1:(getSubpop(etaik)))	{
         indiv2.etaik[x]<-etaik[j,x+5]
       }
 
@@ -191,14 +191,14 @@ calculateRelate <- function(hs, etaik, pkla){
           x<-which(locus1$V2==a[,])
           allelei<-locus1[x,]
 
-          for(x in 1:K)	{
+          for(x in 1:(getSubpop(etaik)))	{
             pklallelei[x]<-allelei[1,x+2]
           }
 
           zi1=0
           zi2=0
 
-          for(x in 1:K){
+          for(x in 1:(getSubpop(etaik))){
             zi1<-zi1+pklallelei[x]*indiv1.etaik[x]
             zi2<-zi2+pklallelei[x]*indiv2.etaik[x]
           }
@@ -218,8 +218,8 @@ calculateRelate <- function(hs, etaik, pkla){
 
         if(IBS==2)	{
 
-          allelei<-array(dim=c(K))
-          allelej<-array(dim=c(K))
+          allelei<-array(dim=c(getSubpop(etaik)))
+          allelej<-array(dim=c(getSubpop(etaik)))
 
           a<-indiv1a[l]
           b<-indiv2a[l]
@@ -230,7 +230,7 @@ calculateRelate <- function(hs, etaik, pkla){
           allelej<-locus1[y,]
 
 
-          for(x in 1:K)	{
+          for(x in 1:(getSubpop(etaik)))	{
             pklallelei[x]<-allelei[1,x+2]
             pklallelej[x]<-allelej[1,x+2]
           }
@@ -240,7 +240,7 @@ calculateRelate <- function(hs, etaik, pkla){
           zj1=0
           zj2=0
 
-          for(x in 1:K)	{
+          for(x in 1:(getSubpop(etaik)))	{
             zi1<-zi1+pklallelei[x]*indiv1.etaik[x]
             zi2<-zi2+pklallelei[x]*indiv2.etaik[x]
             zj1<-zj1+pklallelej[x]*indiv1.etaik[x]
@@ -262,8 +262,8 @@ calculateRelate <- function(hs, etaik, pkla){
 
         if(IBS==3)	{
 
-          pklallelei<-array(dim=c(K))
-          pklallelej<-array(dim=c(K))
+          pklallelei<-array(dim=c(getSubpop(etaik)))
+          pklallelej<-array(dim=c(getSubpop(etaik)))
 
           a<-indiv1a[l]
           b<-indiv2b[l]
@@ -273,7 +273,7 @@ calculateRelate <- function(hs, etaik, pkla){
           allelei<-locus1[x,]
           allelej<-locus1[y,]
 
-          for(x in 1:K)	{
+          for(x in 1:(getSubpop(etaik)))	{
             pklallelei[x]<-allelei[1,x+2]
             pklallelej[x]<-allelej[1,x+2]
           }
@@ -282,7 +282,7 @@ calculateRelate <- function(hs, etaik, pkla){
           zj1=0
           zj2=0
 
-          for(x in 1:K)	{
+          for(x in 1:(getSubpop(etaik)))	{
             zi1<-zi1+pklallelei[x]*indiv1.etaik[x]
             zi2<-zi2+pklallelei[x]*indiv2.etaik[x]
             zj1<-zj1+pklallelej[x]*indiv1.etaik[x]
@@ -315,11 +315,11 @@ calculateRelate <- function(hs, etaik, pkla){
           allelej<-locus1[y,]
           allelek<-locus1[z,]
 
-          pklallelei<-array(dim=c(K))
-          pklallelej<-array(dim=c(K))
-          pklallelek<-array(dim=c(K))
+          pklallelei<-array(dim=c(getSubpop(etaik)))
+          pklallelej<-array(dim=c(getSubpop(etaik)))
+          pklallelek<-array(dim=c(getSubpop(etaik)))
 
-          for(x in 1:K)	{
+          for(x in 1:(getSubpop(etaik)))	{
             pklallelei[x]<-allelei[1,x+2]
             pklallelej[x]<-allelej[1,x+2]
             pklallelek[x]<-allelek[1,x+2]
@@ -332,7 +332,7 @@ calculateRelate <- function(hs, etaik, pkla){
           zk1=0
           zk2=0
 
-          for(x in 1:K)	{
+          for(x in 1:(getSubpop(etaik)))	{
             zi1<-zi1+pklallelei[x]*indiv1.etaik[x]
             zi2<-zi2+pklallelei[x]*indiv2.etaik[x]
             zj1<-zj1+pklallelej[x]*indiv1.etaik[x]
@@ -362,10 +362,10 @@ calculateRelate <- function(hs, etaik, pkla){
 
           allelej<-locus1[x,]
           allelei<-locus1[y,]
-          pklallelei<-array(dim=c(K))
-          pklallelej<-array(dim=c(K))
+          pklallelei<-array(dim=c(getSubpop(etaik)))
+          pklallelej<-array(dim=c(getSubpop(etaik)))
 
-          for(x in 1:K)	{
+          for(x in 1:(getSubpop(etaik)))	{
             pklallelei[x]<-allelei[1,x+2]
             pklallelej[x]<-allelej[1,x+2]
           }
@@ -377,7 +377,7 @@ calculateRelate <- function(hs, etaik, pkla){
           zj1=0
           zj2=0
 
-          for(x in 1:K)	{
+          for(x in 1:(getSubpop(etaik)))	{
             zi1<-zi1+pklallelei[x]*indiv1.etaik[x]
             zi2<-zi2+pklallelei[x]*indiv2.etaik[x]
             zj1<-zj1+pklallelej[x]*indiv1.etaik[x]
@@ -411,11 +411,11 @@ calculateRelate <- function(hs, etaik, pkla){
           allelek<-locus1[y,]
 
 
-          pklallelei<-array(dim=c(K))
-          pklallelej<-array(dim=c(K))
-          pklallelek<-array(dim=c(K))
+          pklallelei<-array(dim=c(getSubpop(etaik)))
+          pklallelej<-array(dim=c(getSubpop(etaik)))
+          pklallelek<-array(dim=c(getSubpop(etaik)))
 
-          for(x in 1:K)	{
+          for(x in 1:(getSubpop(etaik)))	{
             pklallelei[x]<-allelei[1,x+2]
             pklallelej[x]<-allelej[1,x+2]
             pklallelek[x]<-allelek[1,x+2]
@@ -427,7 +427,7 @@ calculateRelate <- function(hs, etaik, pkla){
           zk1=0
           zk2=0
 
-          for(x in 1:K)	{
+          for(x in 1:(getSubpop(etaik)))	{
             zi1<-zi1+pklallelei[x]*indiv1.etaik[x]
             zi2<-zi2+pklallelei[x]*indiv2.etaik[x]
             zj1<-zj1+pklallelej[x]*indiv1.etaik[x]
@@ -459,10 +459,10 @@ calculateRelate <- function(hs, etaik, pkla){
 
           allelei<-locus1[x,]
           allelej<-locus1[y,]
-          pklallelei<-array(dim=c(K))
-          pklallelej<-array(dim=c(K))
+          pklallelei<-array(dim=c(getSubpop(etaik)))
+          pklallelej<-array(dim=c(getSubpop(etaik)))
 
-          for(x in 1:K)	{
+          for(x in 1:(getSubpop(etaik)))	{
             pklallelei[x]<-allelei[1,x+2]
             pklallelej[x]<-allelej[1,x+2]
           }
@@ -472,7 +472,7 @@ calculateRelate <- function(hs, etaik, pkla){
           zj1=0
           zj2=0
 
-          for(x in 1:K)	{
+          for(x in 1:(getSubpop(etaik)))	{
             zi1<-zi1+pklallelei[x]*indiv1.etaik[x]
             zi2<-zi2+pklallelei[x]*indiv2.etaik[x]
             zj1<-zj1+pklallelej[x]*indiv1.etaik[x]
@@ -504,11 +504,11 @@ calculateRelate <- function(hs, etaik, pkla){
           allelej<-locus1[y,]
           allelek<-locus1[z,]
 
-          pklallelei<-array(dim=c(K))
-          pklallelej<-array(dim=c(K))
-          pklallelek<-array(dim=c(K))
+          pklallelei<-array(dim=c(getSubpop(etaik)))
+          pklallelej<-array(dim=c(getSubpop(etaik)))
+          pklallelek<-array(dim=c(getSubpop(etaik)))
 
-          for(x in 1:K)	{
+          for(x in 1:(getSubpop(etaik)))	{
             pklallelei[x]<-allelei[1,x+2]
             pklallelej[x]<-allelej[1,x+2]
             pklallelek[x]<-allelek[1,x+2]
@@ -521,7 +521,7 @@ calculateRelate <- function(hs, etaik, pkla){
           zk1=0
           zk2=0
 
-          for(x in 1:K)	{
+          for(x in 1:(getSubpop(etaik)))	{
             zi1<-zi1+pklallelei[x]*indiv1.etaik[x]
             zi2<-zi2+pklallelei[x]*indiv2.etaik[x]
             zj1<-zj1+pklallelej[x]*indiv1.etaik[x]
@@ -558,12 +558,12 @@ calculateRelate <- function(hs, etaik, pkla){
           allelek<-locus1[z,]
           allelel<-locus1[z1,]
 
-          pklallelei<-array(dim=c(K))
-          pklallelej<-array(dim=c(K))
-          pklallelek<-array(dim=c(K))
-          pklallelel<-array(dim=c(K))
+          pklallelei<-array(dim=c(getSubpop(etaik)))
+          pklallelej<-array(dim=c(getSubpop(etaik)))
+          pklallelek<-array(dim=c(getSubpop(etaik)))
+          pklallelel<-array(dim=c(getSubpop(etaik)))
 
-          for(x in 1:K)	{
+          for(x in 1:(getSubpop(etaik)))	{
             pklallelei[x]<-allelei[1,x+2]
             pklallelej[x]<-allelej[1,x+2]
             pklallelek[x]<-allelek[1,x+2]
@@ -579,7 +579,7 @@ calculateRelate <- function(hs, etaik, pkla){
           zl1=0
           zl2=0
 
-          for(x in 1:K)	{
+          for(x in 1:(getSubpop(etaik)))	{
             zi1<-zi1+pklallelei[x]*indiv1.etaik[x]
             zi2<-zi2+pklallelei[x]*indiv2.etaik[x]
             zj1<-zj1+pklallelej[x]*indiv1.etaik[x]
