@@ -1,7 +1,3 @@
-hs<-read.table("example.str",header=TRUE);
-etaik<-read.table("example.indivq");
-pkla<-read.table("examplepkla.txt");
-
 library(base)
 library(Rsolnp)
 #' Read in the dataset from .indivq file
@@ -23,7 +19,7 @@ getSubpop <- function(etaik){
   K <- length(etaik[,6:ncol(etaik)])
   return(K)
 }
-K <- getSubpop(etaik)
+
 
 #' Read in PKLA data
 #' This function takes a data frame containing PKLA data and returns a data frame with only the PKLA data, excluding the first two columns.
@@ -56,48 +52,6 @@ getLoci <- function(hs){
   loci <- length(hs[,3:ncol(hs)]);
   return(loci)
 }
-
-#' This function reads in three files, including a STR file, an Indivq file, and a Pkla file, and returns a list containing the data from each file.
-#' @return A list containing the data from each of the three files.
-#' @export
-#' @seealso \code{\link{readStr}}, \code{\link{readIndivq}}, \code{\link{readPkla}}
-upload_data <- function() {
-  strfile <- read.table("example.str", header = TRUE)
-  indivqfile <- read.table("example.indivq")
-  pklafile <- read.table("examplepkla.txt")
-
-  return(list(hs = hs, etaik = etaik, pkla = pkla))
-}
-
-#' Read in and extract values from various data files
-#' This function reads in three data files and extracts various values such as the number of loci and subpopulations.
-#' @param hs .STR dataset
-#' @param etaik A data frame containing information about subpopulations; output from MULTICLUST or STRUCTURE
-#' @param pkla A data frame containing information about allele frequency data; output from MULTICLUST or STRUCTURE
-#' @return A list containing data frames for subpopulations, and number of loci etc.
-#' @export
-read_data <- function(hs, etaik, pkla) {
-
-  # read in the files
-  str <- readStr(hs)
-  indiv <- readIndivq(etaik)
-  pkla <- readPkla(pkla)
-  subpop <- getSubpop(etaik)
-  loci <-getLoci(hs)
-
-  # return a list with the data frames
-  return(list(str = str, indiv = indiv, pkla = pkla, subpop=subpop, loci=loci))
-}
-
-# get the data
-data_list <- upload_data()
-
-# read in and extract the data
-extracted_data <- read_data(data_list$hs, data_list$etaik, data_list$pkla)
-
-# print the extracted data
-print(extracted_data)
-
 
 
 #' This function calculates pairwise estimates of relatedness between all individuals in the dataset.
@@ -145,8 +99,6 @@ calculateRelate <- function(hs, etaik, pkla){
 
   # Set value of K, number of subpopulations. This can be decided a priori based on sampling info, or
   # by using STRUCTURE (Pritchard 2000), MULTICLUST (Sethuraman et al.), and the methods of Evanno et al. (2005)
-  etaik<-read.table("example.indivq");
-  K <- getSubpop(etaik)
 
   # Array that holds the final relatedness results. First column has the pair, second has the MC2013WI relatedness, third has MC2013 relatedness
   # Change dimensions according to the number of pairs. Here I have 50 pairs => total number of pairwise comparisons= 50*49/2 = 1225
@@ -695,8 +647,6 @@ calculateRelate <- function(hs, etaik, pkla){
       #Write final relatedness output to a file. You can change name as you like.
       relatfile<-paste(filename1,".relat",sep="")
       write.table(relat,relatfile)}
-    }
+  }
   }
 }
-
-
