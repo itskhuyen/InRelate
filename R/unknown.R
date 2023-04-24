@@ -690,20 +690,14 @@ calculateRelate <- function(hs, etaik, indiv){
 
       # Calculate the relatedness for MC2013WI method
       relatedness1<-2*(mle$pars[1]+0.5*(mle$pars[3]+mle$pars[5]+mle$pars[7])+0.25*(mle$pars[8]))
-      print("693")
-      #calcRelatedness1 <- function(ibds) {
-      #  return(2 * (mle$pars[1] + 0.5 * (mle$pars[3] + mle$pars[5] + mle$pars[7]) + 0.25 * (mle$pars[8])))}
+
       # Append delta values to an output file - you can change name here as you like.
       # adding bootstrap code to this
       deltafile<-paste(filename1,".deltas",sep="")
-      print("699)")
       cat(c(mle$pars[1],mle$pars[2],mle$pars[3],mle$pars[4],mle$pars[5],mle$pars[6],mle$pars[7],mle$pars[8],mle$pars[9]),"\n",file=deltafile,append=TRUE)
 
       # Calculate relatedness for MC2013
       relatedness2<-2*(mle$pars[7]*0.5+0.25*mle$pars[8])
-      #calcRelatedness2 <- function(mle) {
-      #  2*(mle$pars[7]*0.5+0.25*mle$pars[8])}
-
       # Loop controls - don't change!
       #r<-i-decrementi
       #s<-i+2-decrementj
@@ -712,16 +706,15 @@ calculateRelate <- function(hs, etaik, indiv){
       relat[g,1]<-sprintf("%d_%d",i,j)
       relat[g,2]<-relatedness1
       relat[g,3]<-relatedness2
-
       # Loop controls - don't change!
       #decrementj<-decrementj+2
       #decrementi<-decrementi+2
       g<-g+1
+
+      #Write final relatedness output to a file. You can change name as you like.
+      relatfile<-paste(filename1,".relat",sep="")
+      write.table(relat,relatfile)}
     }
-    print("at 721")
-    #Write final relatedness output to a file. You can change name as you like.
-    relatfile<-paste(filename1,".relat",sep="")
-    write.table(relat,relatfile)}
   }
 }
 
