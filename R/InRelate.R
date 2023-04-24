@@ -1,16 +1,14 @@
-hs<-read.table("example.str.str",header=TRUE);
-etaik<-read.table("example.indivq.indivq");
-pkla<-read.table("examplepkla.txt.txt");
+hs<-read.table("example.str",header=TRUE);
+etaik<-read.table("example.indivq");
+pkla<-read.table("examplepkla.txt");
 
+library(base)
+library(Rsolnp)
 #' Read in the dataset from .indivq file
 #' @title Read INDIVQ file
 #' @param etaik An .indivq dataset generated from MULTICLUST or STRUCTURE
 #' @return The read in file of the dataset
-#' @examples
-#' data(etaik)
-#' indivq <- readIndivq(etaik)
 #' @export
-#' @importFrom somePackage getSubpop
 readIndivq <- function(etaik) {
   indivq <- getSubpop(etaik)
   return(etaik)
@@ -20,9 +18,6 @@ readIndivq <- function(etaik) {
 #' This function takes in a dataset and returns the number of subpopulations
 #' @param etaik A dataset containing information on subpopulations generated from MULTICLUST or STRUCTURE
 #' @return The number of subpopulations in the dataset
-#' @examples
-#' data(mydata)
-#' getSubpop(mydata)
 #' @export
 getSubpop <- function(etaik){
   K <- length(etaik[,6:ncol(etaik)])
@@ -34,9 +29,6 @@ K <- getSubpop(etaik)
 #' This function takes a data frame containing PKLA data and returns a data frame with only the PKLA data, excluding the first two columns.
 #' @param pkla A data frame containing PKLA data generated from MULTICLUST or STRUCTURE
 #' @return A data frame with only the PKLA data.
-#' @examples
-#' data(pkla)
-#' pkla_data <- readPkla(pkla)
 #' @export
 readPkla <- function(pkla){
   pkla_data <- pkla[,3:ncol(pkla)];
@@ -47,9 +39,6 @@ readPkla <- function(pkla){
 #' This function reads in the .STR dataset
 #' @param hs A matrix of haplotype data.
 #' @return A matrix of haplotype data.
-#' @examples
-#' data(str)
-#' readStr(str)
 #' @export
 readStr <- function(hs){
   str <- hs;
@@ -62,9 +51,6 @@ readStr <- function(hs){
 #' in the data set.
 #' @param hs A data frame with genetic dat aka the STR file
 #' @return The number of loci in the data set.
-#' @examples
-#' data(str)
-#' getLoci(str)
 #' @export
 getLoci <- function(hs){
   loci <- length(hs[,3:ncol(hs)]);
@@ -73,8 +59,6 @@ getLoci <- function(hs){
 
 #' This function reads in three files, including a STR file, an Indivq file, and a Pkla file, and returns a list containing the data from each file.
 #' @return A list containing the data from each of the three files.
-#' @examples
-#' upload_data()
 #' @export
 #' @seealso \code{\link{readStr}}, \code{\link{readIndivq}}, \code{\link{readPkla}}
 upload_data <- function() {
@@ -116,16 +100,13 @@ print(extracted_data)
 
 
 
-#' this function calculate pairwise estimate between all individuals in the dataset
-#' This function takes in the etaik file, pkla file and indiv file
-#' @param hs .STR dataset
-#' @param etaik A data frame containing information about subpopulations; output from MULTICLUST or STRUCTURE
-#' @param pkla A data frame containing information about allele frequency data; output from MULTICLUST or STRUCTURE
-#' @return pairwise estimation between each individuals.
-#' @examples
-#' calculateRelate(example.str, example.pkla, example.indivq)
+#' This function calculates pairwise estimates of relatedness between all individuals in the dataset.
+#' @param hs A data frame containing STR data.
+#' @param etaik A data frame containing information about subpopulations; output from MULTICLUST or STRUCTURE.
+#' @param pkla A data frame containing information about allele frequency data; output from MULTICLUST or STRUCTURE.
+#' @return Pairwise estimates of relatedness between each pair of individuals.
 #' @export
-calculateRelate <- function(hs, etaik, indiv){
+calculateRelate <- function(hs, etaik, pkla){
   loglikibd<-function(ibds) {
     # array has to be of dim=c(1, number of loci)
     loglik<-array(0,dim=c(1,getLoci(hs)))
@@ -164,7 +145,7 @@ calculateRelate <- function(hs, etaik, indiv){
 
   # Set value of K, number of subpopulations. This can be decided a priori based on sampling info, or
   # by using STRUCTURE (Pritchard 2000), MULTICLUST (Sethuraman et al.), and the methods of Evanno et al. (2005)
-
+  etaik<-read.table("example.indivq");
   K <- getSubpop(etaik)
 
   # Array that holds the final relatedness results. First column has the pair, second has the MC2013WI relatedness, third has MC2013 relatedness

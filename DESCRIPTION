@@ -4,7 +4,7 @@ Title: InRelate: An R Package to Estimate Pairwise Relatedness
 Version: 0.1.0
 Author: Khuyen Nguyen and Arun Sethuraman
 Maintainer: Khuyen Nguyen <knguyen5139@sdsu.edu>
-Description: R software package to accurately estimate genetic relatedness while accounting for population structure
+Description: An R software package to estimate genetic relatedness while accounting for population structure. This R package utilizes the output from MULTICLUST or STRUCTURE for allele frequency data and admixture proportion data.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
