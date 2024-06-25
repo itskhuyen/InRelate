@@ -5,9 +5,9 @@ library(Rsolnp)
 #' @param etaik An .indivq dataset generated from MULTICLUST or STRUCTURE
 #' @return The read in file of the dataset
 #' @export
-readIndivq <- function(etaik) {
-  indivq <- getSubpop(etaik)
-  return(etaik)
+readIndivq <- function(indivqfile) {
+  indivqread <- read.table(indivqfile)
+  return(indivqread)
 }
 
 #' Get number of subpopulations in a dataset
@@ -27,17 +27,18 @@ getSubpop <- function(etaik){
 #' @return A data frame with only the PKLA data.
 #' @export
 readPkla <- function(pkla){
-  pkla_data <- pkla[,3:ncol(pkla)];
-  return(pkla_data)
+  x<-read.table(pkla)
+  #pkla_data <- x[,3:ncol(x)];
+  return(x)
 }
 
 #' Read in STR data
-#' This function reads in the .STR dataset
+#' This function reads in the .STR dataset with first line containing metadata, hence skip 1
 #' @param hs A matrix of haplotype data.
 #' @return A matrix of haplotype data.
 #' @export
 readStr <- function(hs){
-  str <- hs;
+  str <- read.table(hs,skip=1);
   return(str)
 }
 
@@ -51,6 +52,18 @@ readStr <- function(hs){
 getLoci <- function(hs){
   loci <- length(hs[,3:ncol(hs)]);
   return(loci)
+}
+
+
+#' Get the number of individuals in a data set
+#' This function takes a data set as input and returns the number of individuals
+#' in the data set.
+#' @param hs A data frame with genetic dat aka the STR file
+#' @return The number of individuals in the data set.
+#' @export
+getIndivs <- function(hs){
+  indivs <- nrow(hs)/2
+  return(indivs)
 }
 
 
@@ -75,6 +88,9 @@ calculateRelate <- function(hs, etaik, pkla){
     return(-sum(loglik))
   }
 
+tot.Num.Of.Pairwise.Comparison<-function(n){
+  return(n*(n-1)/2)
+}
   # Equality constraint, sum of deltas = 1
 
   eqn1<-function(ibds){
@@ -100,9 +116,10 @@ calculateRelate <- function(hs, etaik, pkla){
   # Set value of K, number of subpopulations. This can be decided a priori based on sampling info, or
   # by using STRUCTURE (Pritchard 2000), MULTICLUST (Sethuraman et al.), and the methods of Evanno et al. (2005)
 
-  # Array that holds the final relatedness results. First column has the pair, second has the MC2013WI relatedness, third has MC2013 relatedness
-  # Change dimensions according to the number of pairs. Here I have 50 pairs => total number of pairwise comparisons= 50*49/2 = 1225
-  relat<-array(0,dim=c(1225,3))
+  test_conditions <- 3
+  number_of_individual <- getIndivs(hs)
+  relat<-array(0,dim=c(tot.Num.Of.Pairwise.Comparison(number_of_individual),test_conditions))
+  
 
   # Arrays for storing the etaiks. Should be of size K.
 
@@ -122,17 +139,12 @@ calculateRelate <- function(hs, etaik, pkla){
   # Loop control variables - don't change!
 
   g<-1
-  #decrementi<-0
-  #decrementj<-1
 
   # Compute over pairs of individuals
-  # Here loop has to be changed according to the STRUCTURE format. I have here 100 individuals, with two lines for each genotype. So each pair has 4 lines.
-  # So loop over number of dyads x 4, increments of 4
-  # TODO: AS - loop over all pairs of individuals instead! DONE: 2/25/2014
+ 
 
-
-  for(i in 1:50) {{
-    for (j in i:50) {
+  for(i in 1:number_of_individual) {{
+    for (j in i:number_of_individual) {
       for(x in 1:(getSubpop(etaik)))	{
         indiv1.etaik[x]<-etaik[i,x+5]
       }
@@ -152,7 +164,7 @@ calculateRelate <- function(hs, etaik, pkla){
       #indiv2a<-hs[j,]
       #indiv2b<-hs[j+1,]
 
-      # Compute across loci. Here I have 300 loci, so skipping first two lines, run loop from 3 to 300+2=302
+	#Compute across all loci
 
       for(l in 3:(getLoci(hs)+2))	{
         # Indentify IBS mode.
